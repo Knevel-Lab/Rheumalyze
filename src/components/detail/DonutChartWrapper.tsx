@@ -15,12 +15,12 @@ export function DonutChartWrapper({ counts }: DonutChartWrapperProps) {
     const [ref, { width, height }] = useMeasure();
 
     const data: IChartProps = {
-        chartTitle: "OVerview per cluster",
+        chartTitle: "OVerview per JIP",
         chartData: [
-            { legend: "Cluster 1", data: counts[1], color: getClusterColor(1) },
-            { legend: "Cluster 2", data: counts[2], color: getClusterColor(2) },
-            { legend: "Cluster 3", data: counts[3], color: getClusterColor(3) },
-            { legend: "Cluster 4", data: counts[4], color: getClusterColor(4) },
+            { legend: "Feet", data: counts[1], color: getClusterColor(1) },
+            { legend: "Oligo", data: counts[2], color: getClusterColor(2) },
+            { legend: "Hand", data: counts[3], color: getClusterColor(3) },
+            { legend: "Poly", data: counts[4], color: getClusterColor(4) },
         ],
     };
 

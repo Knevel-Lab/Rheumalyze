@@ -6,6 +6,7 @@ import { useMeasure } from "@uidotdev/usehooks";
 
 // With this there are no scrollbars and everything is visible
 import "./ScatterChartWrapper-hack.css";
+import { getJIPname } from "@/utils/jipUtils";
 
 interface ScatterChartWrapperProps {
     points: Point[];
@@ -33,10 +34,10 @@ export function ScatterChartWrapper({ points }: ScatterChartWrapperProps) {
                     x: x.x,
                     y: x.y,
                     xAxisCalloutData: x.isOutlier ? "Outlier" : "No outlier",
-                    yAxisCalloutData: "Patient Id:" + x.patientId,
+                    yAxisCalloutData: getJIPname(x.cluster),
                 },
             ],
-            legend: `Cluster ${x.cluster}`,
+            legend: x.patientId,
             color: getClusterColor(x.cluster),
         })),
     };

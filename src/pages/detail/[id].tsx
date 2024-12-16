@@ -90,28 +90,28 @@ export default function Details() {
             <h1>Summary</h1>
             <Group childHeight="240px" childWidth="200px">
                 <div>
-                    <h2 style={{ marginTop: "0px" }}>
-                        <b>{counts.sum}</b> Patients
-                    </h2>
+                    <p style={{ marginTop: "0px" }}>
+                        <b>JIPs</b> <br /> <i>Joint involvement patterns</i>
+                    </p>
                     <ul style={{ lineHeight: "80%" }}>
                         <li>
                             <p>
-                                <b>{counts.counts[1]}</b> Cluster 1{" "}
+                                <b>{counts.counts[1]}</b> Feet{" "}
                             </p>
                         </li>
                         <li>
                             <p>
-                                <b>{counts.counts[2]}</b> Cluster 2{" "}
+                                <b>{counts.counts[2]}</b> Oligo{" "}
                             </p>
                         </li>
                         <li>
                             <p>
-                                <b>{counts.counts[3]}</b> Cluster 3{" "}
+                                <b>{counts.counts[3]}</b> Hand{" "}
                             </p>
                         </li>
                         <li>
                             <p>
-                                <b>{counts.counts[4]}</b> Cluster 4{" "}
+                                <b>{counts.counts[4]}</b> Poly{" "}
                             </p>
                         </li>
                     </ul>
@@ -143,7 +143,7 @@ export default function Details() {
             </Group>
 
             <div>
-                <h1>Swelling & Pain Overview</h1>
+                <h1>Overview</h1>
                 <SwellingPainOverView data={data} clusters={clustering} />
             </div>
 

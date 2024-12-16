@@ -4,20 +4,17 @@ const testCases = [
     {
         name: "spreadsheet",
         files: "tests\\input\\dummy_data2.xlsx",
-        expectedText:
-            "100 Patients14 Cluster 1 11 Cluster 2 24 Cluster 3 51 Cluster 4",
+        expectedText: "14 Feet 11 Oligo 24 Hand 51 Poly",
     },
     {
         name: "spreadsheet and empty cells",
         files: "tests\\input\\dummy_data2_empty_columns.xlsx",
-        expectedText:
-            "4 Patients1 Cluster 1 1 Cluster 2 0 Cluster 3 2 Cluster 4",
+        expectedText: "1 Feet 1 Oligo 0 Hand 2 Poly",
     },
     {
         name: "csv",
         files: "tests\\input\\dummy_data.csv",
-        expectedText:
-            "100 Patients12 Cluster 1 14 Cluster 2 19 Cluster 3 55 Cluster 4",
+        expectedText: "12 Feet 14 Oligo 19 Hand 55 Poly ",
     },
     {
         name: "mixed input",
@@ -25,14 +22,12 @@ const testCases = [
             "tests\\input\\dummy_data.csv",
             "tests\\input\\dummy_data2.xlsx",
         ],
-        expectedText:
-            "200 Patients26 Cluster 1 25 Cluster 2 43 Cluster 3 106 Cluster 4",
+        expectedText: "26 Feet 25 Oligo 43 Hand 106 Poly",
     },
     {
         name: "multiple tabs in excel",
         files: "tests\\input\\dummy_data_with_legend_and_multiple_tabs.xlsx",
-        expectedText:
-            "200 Patients26 Cluster 1 25 Cluster 2 43 Cluster 3 106 Cluster 4",
+        expectedText: "26 Feet 25 Oligo 43 Hand 106 Poly",
     },
 ];
 
