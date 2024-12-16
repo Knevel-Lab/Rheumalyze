@@ -103,7 +103,7 @@ export function SwellingPainOverView({
                             Foot
                             <br />
                             <Text size={200}>
-                                Mostly feet joints are affected
+                                Relatively more joints in the feet are affected.
                             </Text>
                         </>
                     }
@@ -115,8 +115,8 @@ export function SwellingPainOverView({
                             Oligo
                             <br />
                             <Text size={200}>
-                                Mostly seropositive patients and <br /> limited
-                                joint involvement
+                                Relatively more seropositive patients and <br />{" "}
+                                limited joint involvement
                             </Text>
                         </>
                     }
@@ -141,8 +141,8 @@ export function SwellingPainOverView({
                             Poly
                             <br />
                             <Text size={200}>
-                                Majority seronegative polyarthritis in hand and
-                                feet <br /> though with lower ESR.
+                                Relative majority seronegative polyarthritis in
+                                hand and feet <br /> though with lower ESR.
                             </Text>
                         </>
                     }
