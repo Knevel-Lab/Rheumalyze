@@ -23,10 +23,6 @@ const CustomHoverCardOutsideSVG: React.FC<HoverCardProps> = ({
 
     const svgRef = useRef<SVGSVGElement | null>(null);
 
-    const fluentProvider = document.querySelector(
-        ".fui-FluentProvider",
-    ) as HTMLElement | null;
-
     const handleMouseMove = (event: React.MouseEvent<SVGElement>) => {
         const { clientX, clientY } = event;
 
@@ -100,7 +96,8 @@ const CustomHoverCardOutsideSVG: React.FC<HoverCardProps> = ({
                             Legend={data.legend}
                         />
                     </div>,
-                    fluentProvider ?? document.body,
+                    document.getElementById("callout_provider") ??
+                        document.body,
                 )}
         </>
     );

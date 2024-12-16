@@ -30,6 +30,17 @@ export function ChartToolbarWrapper({
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
+    useFullscreenTooltipHandling(
+        document.getElementById("fluent-default-layer-host"),
+        wrapperRef,
+        isFullscreen,
+    );
+    useFullscreenTooltipHandling(
+        document.getElementById("callout_provider"),
+        wrapperRef,
+        isFullscreen,
+    );
+
     // Listen to only exiting fullscreen.
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -48,38 +59,6 @@ export function ChartToolbarWrapper({
             );
         };
     }, []);
-
-    useEffect(() => {
-        // This is a workaround to make the pop-over appear in fullscreen mode.
-        // Fluentui defines a layer outside the <App> so it isn't in the normal document flow
-        // So if we take a subset of the page and make that fullscreen, it won't show.
-        // So this adds that layer to the component that we toggle.
-        // And after closing fullscreen we move it back to the orginal parent.
-
-        const tooltipElement = document.getElementById(
-            "fluent-default-layer-host",
-        );
-        const chartContainer = wrapperRef.current;
-        let originalParent: HTMLElement | null = null;
-
-        if (tooltipElement) {
-            // Save the original parent the first time we manipulate the tooltip element
-            if (!originalParent) {
-                originalParent = tooltipElement.parentElement;
-            }
-
-            if (isFullscreen && chartContainer) {
-                chartContainer.append(tooltipElement);
-            } else if (!isFullscreen) {
-                if (chartContainer && chartContainer.contains(tooltipElement)) {
-                    chartContainer.removeChild(tooltipElement);
-                }
-                if (originalParent) {
-                    originalParent.append(tooltipElement);
-                }
-            }
-        }
-    }, [isFullscreen]);
 
     const handleFullscreen = () => {
         if (wrapperRef.current) {
@@ -181,4 +160,39 @@ export function ChartToolbarWrapper({
             </div>
         </div>
     );
+}
+
+// This is a workaround to make the pop-over appear in fullscreen mode.
+// Fluentui defines a layer outside the <App> so it isn't in the normal document flow
+// So if we take a subset of the page and make that fullscreen, it won't show.
+// So this adds that layer to the component that we toggle.
+// And after closing fullscreen we move it back to the orginal parent.
+
+function useFullscreenTooltipHandling(
+    tooltipElement: HTMLElement | null,
+    wrapperRef: React.RefObject<HTMLElement>,
+    isFullscreen: boolean,
+) {
+    useEffect(() => {
+        if (!tooltipElement) return;
+
+        const chartContainer = wrapperRef.current;
+        let originalParent: HTMLElement | null = null;
+
+        // Save the original parent the first time we manipulate the tooltip element
+        if (!originalParent) {
+            originalParent = tooltipElement.parentElement;
+        }
+
+        if (isFullscreen && chartContainer) {
+            chartContainer.append(tooltipElement);
+        } else if (!isFullscreen) {
+            if (chartContainer && chartContainer.contains(tooltipElement)) {
+                chartContainer.removeChild(tooltipElement);
+            }
+            if (originalParent) {
+                originalParent.append(tooltipElement);
+            }
+        }
+    }, [tooltipElement, wrapperRef, isFullscreen]);
 }
