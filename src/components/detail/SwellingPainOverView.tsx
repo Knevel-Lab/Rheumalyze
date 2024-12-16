@@ -100,7 +100,7 @@ export function SwellingPainOverView({
                     value="1"
                     label={
                         <>
-                            Cluster 1
+                            Foot
                             <br />
                             <Text size={200}>
                                 Mostly feet joints are affected
@@ -112,7 +112,7 @@ export function SwellingPainOverView({
                     value="2"
                     label={
                         <>
-                            Cluster 2
+                            Oligo
                             <br />
                             <Text size={200}>
                                 Mostly seropositive patients and <br /> limited
@@ -125,7 +125,7 @@ export function SwellingPainOverView({
                     value="3"
                     label={
                         <>
-                            Cluster 3
+                            Hand
                             <br />
                             <Text size={200}>
                                 Symmetrical polyarthritis of hands with <br />{" "}
@@ -138,7 +138,7 @@ export function SwellingPainOverView({
                     value="4"
                     label={
                         <>
-                            Cluster 4
+                            Poly
                             <br />
                             <Text size={200}>
                                 Majority seronegative polyarthritis in hand and
@@ -376,13 +376,6 @@ function RenderLegend(): ReactNode {
             </div>
         </div>
     );
-}
-
-function getSuffix(filtering: number | null) {
-    if (filtering == null) {
-        return "(All)";
-    }
-    return `(Cluster ${filtering})`;
 }
 
 // Since the input format has swelling and pain combined diffrentiated by prefix, we must seperate them.
