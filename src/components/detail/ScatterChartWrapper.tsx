@@ -34,10 +34,10 @@ export function ScatterChartWrapper({ points }: ScatterChartWrapperProps) {
                     x: x.x,
                     y: x.y,
                     xAxisCalloutData: x.isOutlier ? "Outlier" : "No outlier",
-                    yAxisCalloutData: "Patient Id:" + x.patientId,
+                    yAxisCalloutData: getJIPname(x.cluster),
                 },
             ],
-            legend: getJIPname(x.cluster),
+            legend: x.patientId,
             color: getClusterColor(x.cluster),
         })),
     };
