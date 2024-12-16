@@ -1,104 +1,85 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { Joints } from "./Joints";
 import { Mannequin } from "./Mannequin";
+import CustomHoverCardOutsideSVG from "../CustomHoverCardOutsideSVG";
+import { round } from "../RangeGraph";
 
 interface MannequinDisplayProps {
     jointsWithScore: Record<string, number>;
     fillColor?: string;
 }
 
+const radius = 12;
+
 export const MannequinDisplay: React.FC<MannequinDisplayProps> = ({
     jointsWithScore,
     fillColor,
 }) => {
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const radius = 12;
-
     const orginalHeight = 450;
     const orginalWidth = 363;
 
-    const backgroundImage = useRef<HTMLImageElement>(new Image());
-    backgroundImage.current.src = Mannequin;
-
-    const drawCircles = (ctx: CanvasRenderingContext2D) => {
-        const currentHeight = canvasRef.current?.height ?? orginalHeight;
-        const currentWidth = canvasRef.current?.width ?? orginalWidth;
-
-        const scaleY = currentHeight / orginalHeight;
-        const scaleX = currentWidth / orginalWidth;
-
-        const fluentProvider = document.querySelector(
-            ".fui-FluentProvider",
-        ) as HTMLElement | null;
-
-        const color = fillColor
-            ? fillColor
-            : fluentProvider
-              ? window
-                    .getComputedStyle(fluentProvider)
-                    .getPropertyValue("--colorBrandBackgroundStatic") || "black"
-              : "black";
-
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset scale
-
-        ctx.drawImage(
-            backgroundImage.current,
-            0,
-            0,
-            ctx.canvas.width,
-            ctx.canvas.height,
-        );
-
-        Joints.forEach((joint) => {
-            const value = jointsWithScore[joint.id] ?? 0;
-            ctx.beginPath();
-            ctx.arc(
-                (joint.x / 4) * scaleX,
-                (joint.y / 4) * scaleY,
-                value * radius,
-                0,
-                2 * Math.PI,
-            ); // Value is expected to be between 0 and 1
-            ctx.fillStyle = value !== 0 ? color : "black";
-            ctx.fill();
-        });
-
-        ctx.scale(scaleX, scaleY);
-    };
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-
-        if (!canvas) return;
-
-        canvas.width = canvas.parentElement?.clientWidth ?? 0;
-        canvas.height = canvas.parentElement?.clientHeight ?? 0;
-
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        backgroundImage.current.onload = () => {};
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-        if (backgroundImage.current.complete) {
-            drawCircles(ctx);
-        } else {
-            backgroundImage.current.onload = () => {
-                drawCircles(ctx);
-            };
-        }
-    }, [jointsWithScore]);
-
+    const color = fillColor ?? "var(--colorBrandBackgroundStatic)";
     return (
-        <canvas
-            ref={canvasRef}
+        <svg
+            viewBox={`0 0 ${orginalWidth} ${orginalHeight}`}
             style={{
-                minHeight: "0px",
-                maxHeight: "100%",
-                minWidth: "100%",
-                maxWidth: "100%",
+                width: "100%",
+                height: "100%",
             }}
-        />
+        >
+            <image
+                href={Mannequin}
+                width={orginalWidth}
+                height={orginalHeight}
+            />
+
+            <circle cx={0} cy={15} r={radius} fill={"Black"} />
+
+            <text x="20" y="18">
+                0%
+            </text>
+
+            <circle cx={0} cy={45} r={radius} fill={"Black"} />
+            <circle cx={0} cy={45} r={radius * 0.5} fill={color} />
+
+            <text x="20" y="48">
+                50%
+            </text>
+
+            <circle cx={0} cy={75} r={radius} fill={color} />
+
+            <text x="20" y="78">
+                100%
+            </text>
+
+            {Joints.map((joint) => {
+                const value = jointsWithScore[joint.id] ?? 0;
+
+                return (
+                    <CustomHoverCardOutsideSVG
+                        data={{
+                            color: color,
+                            yValue: `${round(value * 100)}%`,
+                            legend: joint.id,
+                        }}
+                    >
+                        <circle
+                            key={joint.id + "_black"}
+                            cx={joint.x / 4}
+                            cy={joint.y / 4}
+                            r={radius}
+                            fill={"black"}
+                        />
+                        <circle
+                            key={joint.id}
+                            cx={joint.x / 4}
+                            cy={joint.y / 4}
+                            r={value * radius}
+                            fill={color}
+                        />
+                    </CustomHoverCardOutsideSVG>
+                );
+            })}
+        </svg>
     );
 };

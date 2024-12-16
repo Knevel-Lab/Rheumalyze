@@ -96,7 +96,8 @@ const CustomHoverCardOutsideSVG: React.FC<HoverCardProps> = ({
                             Legend={data.legend}
                         />
                     </div>,
-                    document.body, // Rendering directly into the body
+                    document.getElementById("callout_provider") ??
+                        document.body,
                 )}
         </>
     );

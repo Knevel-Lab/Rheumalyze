@@ -160,18 +160,14 @@ export function SwellingPainOverView({
             </RadioGroup>
 
             <Group childHeight="500px" childWidth="400px">
-                <ChartToolbarWrapper
-                    title={"Average swelling " + getSuffix(filtering)}
-                >
+                <ChartToolbarWrapper title={"Swelling"}>
                     <MannequinDisplay
                         jointsWithScore={averageSwelling}
                         fillColor={getClusterColor(filtering)}
                     ></MannequinDisplay>
                 </ChartToolbarWrapper>
 
-                <ChartToolbarWrapper
-                    title={"Average pain " + getSuffix(filtering)}
-                >
+                <ChartToolbarWrapper title={"Pain"}>
                     <MannequinDisplay
                         jointsWithScore={averagePain}
                         fillColor={getClusterColor(filtering)}
