@@ -67,3 +67,5 @@ interface Coordinate {
     y: number;
     z: number;
 }
+
+export type { Coordinate };
