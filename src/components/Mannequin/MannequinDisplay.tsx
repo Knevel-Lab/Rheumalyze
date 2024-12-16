@@ -18,6 +18,7 @@ export const MannequinDisplay: React.FC<MannequinDisplayProps> = ({
     const orginalHeight = 450;
     const orginalWidth = 363;
 
+    const color = fillColor ?? "var(--colorBrandBackgroundStatic)";
     return (
         <svg
             viewBox={`0 0 ${orginalWidth} ${orginalHeight}`}
@@ -32,9 +33,27 @@ export const MannequinDisplay: React.FC<MannequinDisplayProps> = ({
                 height={orginalHeight}
             />
 
+            <circle cx={0} cy={15} r={radius} fill={"Black"} />
+
+            <text x="20" y="18">
+                0%
+            </text>
+
+            <circle cx={0} cy={45} r={radius} fill={"Black"} />
+            <circle cx={0} cy={45} r={radius * 0.5} fill={color} />
+
+            <text x="20" y="48">
+                50%
+            </text>
+
+            <circle cx={0} cy={75} r={radius} fill={color} />
+
+            <text x="20" y="78">
+                100%
+            </text>
+
             {Joints.map((joint) => {
                 const value = jointsWithScore[joint.id] ?? 0;
-                const color = fillColor ?? "var(--colorBrandBackgroundStatic)";
 
                 return (
                     <CustomHoverCardOutsideSVG
