@@ -308,15 +308,18 @@ const RangeGraph: React.FC<RangeGraphProps> = ({
                         color="lightgray"
                     />
 
-                    {React.Children.map(
-                        children,
-                        (child) =>
-                            child &&
-                            React.cloneElement(
-                                child as React.ReactElement<any>,
-                                { minValue, maxValue },
-                            ), // Auw
-                    )}
+                    {
+                        React.Children.map(
+                            children,
+                            (child) =>
+                                React.isValidElement(child) &&
+                                renderChild(
+                                    child as React.ReactElement<any>,
+                                    minValue,
+                                    maxValue,
+                                ),
+                        ) // Auw
+                    }
 
                     {/* Min and Max Labels */}
                     <text
@@ -342,6 +345,45 @@ const RangeGraph: React.FC<RangeGraphProps> = ({
         </div>
     );
 };
+
+function renderChild(
+    child: React.ReactElement<any>,
+    minValue: number,
+    maxValue: number,
+) {
+    const { end, color } = child.props;
+
+    if (end > maxValue) {
+        console.log("OVerflow!");
+    }
+
+    return (
+        <>
+            {React.cloneElement(child as React.ReactElement<any>, {
+                minValue,
+                maxValue,
+            })}
+            {end > maxValue && (
+                <>
+                    {" "}
+                    <defs>
+                        <linearGradient id={"overflow_gradient" + color}>
+                            <stop offset="5%" stop-color={color} />
+                            <stop offset="95%" stop-color="#FFF" />
+                        </linearGradient>
+                    </defs>
+                    <rect
+                        x={"95%"}
+                        y={"35%"}
+                        width={"5%"}
+                        height={"12"}
+                        fill={`url(#overflow_gradient${color})`}
+                    ></rect>
+                </>
+            )}
+        </>
+    );
+}
 
 function round(value: number, decimals = 1): string {
     return value.toLocaleString(undefined, {
