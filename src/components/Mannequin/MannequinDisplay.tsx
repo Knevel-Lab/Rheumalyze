@@ -34,10 +34,7 @@ export const MannequinDisplay: React.FC<MannequinDisplayProps> = ({
 
             {Joints.map((joint) => {
                 const value = jointsWithScore[joint.id] ?? 0;
-                const color =
-                    value !== 0
-                        ? (fillColor ?? "var(--colorBrandBackgroundStatic)")
-                        : "black";
+                const color = fillColor ?? "var(--colorBrandBackgroundStatic)";
 
                 return (
                     <CustomHoverCardOutsideSVG
