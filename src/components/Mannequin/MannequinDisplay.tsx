@@ -33,22 +33,22 @@ export const MannequinDisplay: React.FC<MannequinDisplayProps> = ({
                 height={orginalHeight}
             />
 
-            <circle cx={0} cy={15} r={radius} fill={"Black"} />
+            <circle cx={12} cy={15} r={radius} fill={"Black"} />
 
-            <text x="20" y="18">
+            <text x="40" y="18">
                 0%
             </text>
 
-            <circle cx={0} cy={45} r={radius} fill={"Black"} />
-            <circle cx={0} cy={45} r={radius * 0.5} fill={color} />
+            <circle cx={12} cy={45} r={radius} fill={"Black"} />
+            <circle cx={12} cy={45} r={radius * 0.5} fill={color} />
 
-            <text x="20" y="48">
+            <text x="33" y="48">
                 50%
             </text>
 
-            <circle cx={0} cy={75} r={radius} fill={color} />
+            <circle cx={12} cy={75} r={radius} fill={color} />
 
-            <text x="20" y="78">
+            <text x="27" y="78">
                 100%
             </text>
 
