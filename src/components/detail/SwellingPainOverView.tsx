@@ -32,13 +32,13 @@ const pallete = [
 
 const parameterConfig = [
     {
-        label: "Leuko",
+        label: "Leukocytes",
         minValue: 0,
         maxValue: 20,
         acceptedRange: [4, 10],
     },
     {
-        label: "Hb",
+        label: "Hemoglobin",
         minValue: 0,
         maxValue: 20,
         acceptedRange: [8, 10],
@@ -50,13 +50,13 @@ const parameterConfig = [
         acceptedRange: [80, 100],
     },
     {
-        label: "Trom",
+        label: "Thrombocytes",
         minValue: 0,
         maxValue: 1100,
         acceptedRange: [150, 400],
     },
     {
-        label: "BSE",
+        label: "ESR",
         minValue: 0,
         maxValue: 140,
         acceptedRange: [0, 25],
@@ -290,32 +290,32 @@ export function SwellingPainOverView({
                             />
                         </RangeGraph>
 
-                        <RangeGraph label="aCCP" minValue={0} maxValue={100}>
+                        <RangeGraph label="ACPA" minValue={0} maxValue={100}>
                             <FilledBarPercentageIndicator
                                 start={0}
                                 percentage={
-                                    (filtered_data.filter((x) => x.aCCP === 1)
+                                    (filtered_data.filter((x) => x.ACPA === 1)
                                         .length /
                                         filtered_data.length) *
                                     100
                                 }
-                                label="aCCP positive"
+                                label="ACPA positive"
                                 color={pallete[9]}
                             />
                             <FilledBarPercentageIndicator
                                 start={
-                                    (filtered_data.filter((x) => x.aCCP === 1)
+                                    (filtered_data.filter((x) => x.ACPA === 1)
                                         .length /
                                         filtered_data.length) *
                                     100
                                 }
                                 percentage={
-                                    (filtered_data.filter((x) => x.aCCP === 0)
+                                    (filtered_data.filter((x) => x.ACPA === 0)
                                         .length /
                                         filtered_data.length) *
                                     100
                                 }
-                                label="aCCP negative"
+                                label="ACPA negative"
                                 color={"lightgray"}
                             />
                         </RangeGraph>

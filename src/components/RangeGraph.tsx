@@ -324,7 +324,7 @@ const RangeGraph: React.FC<RangeGraphProps> = ({
                     {/* Min and Max Labels */}
                     <text
                         x={"0%"}
-                        y={"95%"}
+                        y={"100%"}
                         fontSize={14}
                         textAnchor={"start"}
                         fill={"black"}
@@ -333,7 +333,7 @@ const RangeGraph: React.FC<RangeGraphProps> = ({
                     </text>
                     <text
                         x={"100%"}
-                        y={"95%"}
+                        y={"100%"}
                         fontSize={14}
                         textAnchor={"end"}
                         fill={"black"}
@@ -352,10 +352,6 @@ function renderChild(
     maxValue: number,
 ) {
     const { end, color } = child.props;
-
-    if (end > maxValue) {
-        console.log("OVerflow!");
-    }
 
     return (
         <>

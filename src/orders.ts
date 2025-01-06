@@ -1,13 +1,13 @@
 const expectedColumnInFile: string[] = [
-    "PATNR",
-    "Leuko",
-    "Hb",
+    "Patient number",
+    "Leukocytes",
+    "Hemoglobin",
     "MCV",
-    "Trom",
-    "BSE",
+    "Thrombocytes",
+    "ESR",
     "Age",
     "RF",
-    "aCCP",
+    "ACPA",
     "Sex",
     "Pijn_acromioclaviaculair R",
     "Pijn_acromioclaviaculair L",
@@ -367,12 +367,13 @@ const lcat = [
     "Pijn_temporomandibulair R_negative",
     "Pijn_temporomandibulair R_positive",
     "RF",
-    "aCCP",
+    "ACPA",
     "Sex",
     "Age_Early",
     "Age_Late",
 ];
-const lnum = ["Leuko", "Hb", "MCV", "Trom", "BSE", "Age"];
-const expectedOrderForModel = ["PATNR"].concat(lnum).concat(lcat);
+
+const lnum = ["Leukocytes", "Hemoglobin", "MCV", "Thrombocytes", "ESR", "Age"];
+const expectedOrderForModel = ["Patient number"].concat(lnum).concat(lcat);
 
 export { expectedColumnInFile, expectedOrderForModel };
