@@ -386,9 +386,9 @@ function seperateZwellingAndPijn(
         (x) =>
             Object.fromEntries(
                 Object.entries(x)
-                    .filter(([key, _]) => key.startsWith("Zwelling"))
+                    .filter(([key, _]) => key.startsWith("s"))
                     .map(([key, value]) => [
-                        key.replace("Zwelling_", ""),
+                        key.replace("s_", ""),
                         value as number,
                     ]),
             ) as Record<string, number>,
@@ -398,9 +398,9 @@ function seperateZwellingAndPijn(
         (x) =>
             Object.fromEntries(
                 Object.entries(x)
-                    .filter(([key, _]) => key.startsWith("Pijn"))
+                    .filter(([key, _]) => key.startsWith("t"))
                     .map(([key, value]) => [
-                        key.replace("Pijn_", ""),
+                        key.replace("t_", ""),
                         value as number,
                     ]),
             ) as Record<string, number>,

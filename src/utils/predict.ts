@@ -43,14 +43,14 @@ export function predict({
     }
 }
 
-// Preprocess by duplicating keys with pijn or zwelling into _positieve and _negatieve and reorder as expected by the model. And capitalize first letters
+// Preprocess by duplicating keys with t or s into _positieve and _negatieve and reorder as expected by the model.
 function pre_process(data: FileInput) {
     const copy = { ...data };
 
     for (const key of Object.keys(data)) {
         const value = copy[key];
 
-        if (key.includes("Pijn") || key.includes("Zwelling")) {
+        if (key.includes("s_") || key.includes("t_")) {
             copy[`${key}_positive`] = value;
             copy[`${key}_negative`] = value == 1 ? 0 : 1;
 
