@@ -14,7 +14,11 @@ import DetailDataGrid from "@/components/detail/detailDatagrid";
 import { DonutChartWrapper } from "@/components/detail/DonutChartWrapper";
 import { DetailUmap } from "@/components/detail/DetailUmap";
 
-import { ArrowDownload24Regular } from "@fluentui/react-icons";
+import {
+    ArrowDownload24Regular,
+    DropFilled,
+    HandRightFilled,
+} from "@fluentui/react-icons";
 import { exportJsonToExcel } from "@/utils/exportToExcel";
 import { ChartToolbarWrapper } from "@/components/detail/ChartToolbarWrapper";
 
@@ -22,6 +26,9 @@ import Group from "@/components/Group";
 import { SwellingPainOverView } from "@/components/detail/SwellingPainOverView";
 import { DetailUmapSettings } from "@/components/detail/detailUmapSettings";
 import { useState } from "react";
+import FeetIcon from "@/icon/Feet";
+import ThunderIcon from "@/icon/Thunder";
+import { getClusterColor } from "@/components/detail/clusterColerUtils";
 
 const useClasses = makeStyles({
     div: {
@@ -93,28 +100,30 @@ export default function Details() {
                     <p style={{ marginTop: "0px" }}>
                         <b>JIPs</b> <br /> <i>Joint involvement patterns</i>
                     </p>
-                    <ul style={{ lineHeight: "80%" }}>
-                        <li>
-                            <p>
-                                <b>{counts.counts[1]}</b> Feet{" "}
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <b>{counts.counts[2]}</b> Oligo{" "}
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <b>{counts.counts[3]}</b> Hand{" "}
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <b>{counts.counts[4]}</b> Poly{" "}
-                            </p>
-                        </li>
-                    </ul>
+
+                    <p>
+                        <b style={{ fontSize: "x-large" }}>
+                            {" "}
+                            {counts.counts[1]}{" "}
+                        </b>{" "}
+                        <FeetIcon fill={getClusterColor(1)} /> Feet <br />
+                        <b style={{ fontSize: "x-large" }}>
+                            {" "}
+                            {counts.counts[2]}{" "}
+                        </b>{" "}
+                        <DropFilled color={getClusterColor(2)} /> Oligo <br />
+                        <b style={{ fontSize: "x-large" }}>
+                            {" "}
+                            {counts.counts[3]}{" "}
+                        </b>{" "}
+                        <HandRightFilled color={getClusterColor(3)} /> Hand{" "}
+                        <br />
+                        <b style={{ fontSize: "x-large" }}>
+                            {" "}
+                            {counts.counts[4]}{" "}
+                        </b>
+                        <ThunderIcon fill={getClusterColor(4)} /> Poly <br />
+                    </p>
                 </div>
 
                 <ChartToolbarWrapper title="Distribution">

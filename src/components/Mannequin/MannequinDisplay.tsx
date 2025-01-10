@@ -33,22 +33,26 @@ export const MannequinDisplay: React.FC<MannequinDisplayProps> = ({
                 height={orginalHeight}
             />
 
-            <circle cx={0} cy={15} r={radius} fill={"Black"} />
+            <circle cx={12} cy={15} r={radius + 1} fill={"Black"} />
+            <circle cx={12} cy={15} r={radius} fill={"white"} />
 
-            <text x="20" y="18">
+            <text x="40" y="18">
                 0%
             </text>
 
-            <circle cx={0} cy={45} r={radius} fill={"Black"} />
-            <circle cx={0} cy={45} r={radius * 0.5} fill={color} />
+            <circle cx={12} cy={45} r={radius + 1} fill={"Black"} />
+            <circle cx={12} cy={45} r={radius} fill={"white"} />
+            <circle cx={12} cy={45} r={radius * 0.5} fill={color} />
 
-            <text x="20" y="48">
+            <text x="33" y="48">
                 50%
             </text>
 
-            <circle cx={0} cy={75} r={radius} fill={color} />
+            <circle cx={12} cy={75} r={radius + 1} fill={"Black"} />
+            <circle cx={12} cy={75} r={radius} fill={"white"} />
+            <circle cx={12} cy={75} r={radius} fill={color} />
 
-            <text x="20" y="78">
+            <text x="27" y="78">
                 100%
             </text>
 
@@ -60,16 +64,24 @@ export const MannequinDisplay: React.FC<MannequinDisplayProps> = ({
                         data={{
                             color: color,
                             yValue: `${round(value * 100)}%`,
-                            legend: joint.id,
+                            legend: joint.label ?? joint.id,
                         }}
                     >
                         <circle
                             key={joint.id + "_black"}
                             cx={joint.x / 4}
                             cy={joint.y / 4}
-                            r={radius}
+                            r={radius + 1}
                             fill={"black"}
                         />
+                        <circle
+                            key={joint.id + "_white"}
+                            cx={joint.x / 4}
+                            cy={joint.y / 4}
+                            r={radius}
+                            fill={"white"}
+                        />
+
                         <circle
                             key={joint.id}
                             cx={joint.x / 4}

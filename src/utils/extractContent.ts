@@ -27,6 +27,7 @@ async function ExtractCSV(file: File): Promise<any[]> {
     return new Promise((resolve, reject) => {
         papa.parse<JSON>(file, {
             header: true,
+            skipEmptyLines: true,
             complete: function (results) {
                 resolve(results.data);
             },

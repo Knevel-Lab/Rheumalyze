@@ -42,21 +42,21 @@ export default function Index() {
 
     const data = [
         {
-            PATNR: "0000",
-            Leuko: leuko,
-            Hb: hb,
+            "Patient number": "0000",
+            Leukocytes: leuko,
+            Hemoglobin: hb,
             MCV: mcv,
-            Trom: trom,
-            BSE: bse,
+            Thrombocytes: trom,
+            ESR: bse,
             Age: age,
             Sex: sex,
             RF: rf,
-            aCCP: accp,
+            ACPA: accp,
             ...Object.fromEntries(
-                pain.map((x) => ["Pijn_" + x.id, x.isSelected ? 1 : 0]),
+                pain.map((x) => ["t_" + x.id, x.isSelected ? 1 : 0]),
             ),
             ...Object.fromEntries(
-                swelling.map((x) => ["Zwelling_" + x.id, x.isSelected ? 1 : 0]),
+                swelling.map((x) => ["s_" + x.id, x.isSelected ? 1 : 0]),
             ),
         },
     ];
@@ -81,24 +81,38 @@ export default function Index() {
 
     return (
         <>
-            <Group childHeight="500px" childWidth="400px">
+            <Group childHeight="550px" childWidth="400px">
                 <div>
                     <h1>Numeric </h1>
                     <MinMax
-                        label="Leuko"
+                        label="Leukocytes"
                         onChange={(value) => setLeuko(value)}
                     />
-                    <MinMax label="Hb" onChange={(value) => setHb(value)} />
-                    <MinMax label="MCV" onChange={(value) => setMcv(value)} />
-                    <MinMax label="Trom" onChange={(value) => setTrom(value)} />
                     <MinMax
-                        label="BSE"
+                        label="Hemoglobin"
+                        max={50}
+                        onChange={(value) => setHb(value)}
+                    />
+                    <MinMax
+                        label="MCV"
+                        max={250}
+                        onChange={(value) => setMcv(value)}
+                    />
+                    <MinMax
+                        label="Thrombocytes"
+                        max={2000}
+                        onChange={(value) => setTrom(value)}
+                    />
+                    <MinMax
+                        label="ESR"
                         min={1}
+                        max={1000}
                         onChange={(value) => setBse(value)}
                     />
                     <MinMax
                         label="Age"
                         min={1}
+                        max={120}
                         onChange={(value) => setAge(value)}
                     />
                 </div>
@@ -113,7 +127,7 @@ export default function Index() {
                         onChange={(_, data) => setRf(data.checked ? 1 : 0)}
                     />
                     <Switch
-                        label="aCCP"
+                        label="ACPA"
                         onChange={(_, data) => setAccp(data.checked ? 1 : 0)}
                     />
                 </div>

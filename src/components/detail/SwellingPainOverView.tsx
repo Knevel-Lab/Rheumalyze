@@ -16,6 +16,9 @@ import {
     Triangle,
 } from "../RangeGraph";
 import { standardDeviation } from "@/utils/standardDeviation";
+import FeetIcon from "@/icon/Feet";
+import ThunderIcon from "@/icon/Thunder";
+import { DropFilled, HandRightFilled } from "@fluentui/react-icons";
 
 const pallete = [
     "#fd7f6f",
@@ -32,13 +35,13 @@ const pallete = [
 
 const parameterConfig = [
     {
-        label: "Leuko",
+        label: "Leukocytes",
         minValue: 0,
         maxValue: 20,
         acceptedRange: [4, 10],
     },
     {
-        label: "Hb",
+        label: "Hemoglobin",
         minValue: 0,
         maxValue: 20,
         acceptedRange: [8, 10],
@@ -50,13 +53,13 @@ const parameterConfig = [
         acceptedRange: [80, 100],
     },
     {
-        label: "Trom",
+        label: "Thrombocytes",
         minValue: 0,
         maxValue: 1100,
         acceptedRange: [150, 400],
     },
     {
-        label: "BSE",
+        label: "ESR",
         minValue: 0,
         maxValue: 140,
         acceptedRange: [0, 25],
@@ -100,10 +103,11 @@ export function SwellingPainOverView({
                     value="1"
                     label={
                         <>
-                            Foot
+                            <FeetIcon />
+                            <span> Foot </span>
                             <br />
                             <Text size={200}>
-                                Mostly feet joints are affected
+                                Relatively more joints in the feet are affected.
                             </Text>
                         </>
                     }
@@ -112,11 +116,12 @@ export function SwellingPainOverView({
                     value="2"
                     label={
                         <>
-                            Oligo
+                            <DropFilled />
+                            <span> Oligo </span>
                             <br />
                             <Text size={200}>
-                                Mostly seropositive patients and <br /> limited
-                                joint involvement
+                                Relatively more seropositive patients and <br />{" "}
+                                limited joint involvement
                             </Text>
                         </>
                     }
@@ -125,7 +130,8 @@ export function SwellingPainOverView({
                     value="3"
                     label={
                         <>
-                            Hand
+                            <HandRightFilled />
+                            <span> Hand </span>
                             <br />
                             <Text size={200}>
                                 Symmetrical polyarthritis of hands with <br />{" "}
@@ -138,11 +144,12 @@ export function SwellingPainOverView({
                     value="4"
                     label={
                         <>
-                            Poly
+                            <ThunderIcon />
+                            <span> Poly </span>
                             <br />
                             <Text size={200}>
-                                Majority seronegative polyarthritis in hand and
-                                feet <br /> though with lower ESR.
+                                Relative majority seronegative polyarthritis in
+                                hand and feet <br /> though with lower ESR.
                             </Text>
                         </>
                     }
@@ -290,32 +297,32 @@ export function SwellingPainOverView({
                             />
                         </RangeGraph>
 
-                        <RangeGraph label="aCCP" minValue={0} maxValue={100}>
+                        <RangeGraph label="ACPA" minValue={0} maxValue={100}>
                             <FilledBarPercentageIndicator
                                 start={0}
                                 percentage={
-                                    (filtered_data.filter((x) => x.aCCP === 1)
+                                    (filtered_data.filter((x) => x.ACPA === 1)
                                         .length /
                                         filtered_data.length) *
                                     100
                                 }
-                                label="aCCP positive"
+                                label="ACPA positive"
                                 color={pallete[9]}
                             />
                             <FilledBarPercentageIndicator
                                 start={
-                                    (filtered_data.filter((x) => x.aCCP === 1)
+                                    (filtered_data.filter((x) => x.ACPA === 1)
                                         .length /
                                         filtered_data.length) *
                                     100
                                 }
                                 percentage={
-                                    (filtered_data.filter((x) => x.aCCP === 0)
+                                    (filtered_data.filter((x) => x.ACPA === 0)
                                         .length /
                                         filtered_data.length) *
                                     100
                                 }
-                                label="aCCP negative"
+                                label="ACPA negative"
                                 color={"lightgray"}
                             />
                         </RangeGraph>
@@ -386,9 +393,9 @@ function seperateZwellingAndPijn(
         (x) =>
             Object.fromEntries(
                 Object.entries(x)
-                    .filter(([key, _]) => key.startsWith("Zwelling"))
+                    .filter(([key, _]) => key.startsWith("s"))
                     .map(([key, value]) => [
-                        key.replace("Zwelling_", ""),
+                        key.replace("s_", ""),
                         value as number,
                     ]),
             ) as Record<string, number>,
@@ -398,9 +405,9 @@ function seperateZwellingAndPijn(
         (x) =>
             Object.fromEntries(
                 Object.entries(x)
-                    .filter(([key, _]) => key.startsWith("Pijn"))
+                    .filter(([key, _]) => key.startsWith("t"))
                     .map(([key, value]) => [
-                        key.replace("Pijn_", ""),
+                        key.replace("t_", ""),
                         value as number,
                     ]),
             ) as Record<string, number>,
