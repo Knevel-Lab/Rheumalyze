@@ -47,10 +47,10 @@ export function predict({
 function pre_process(data: FileInput) {
     const copy = { ...data };
 
-    data["s_onderste_spronggewricht_left"] = data["s_ank_left"];
-    data["t_onderste_spronggewricht_left"] = data["t_ank_left"];
-    data["s_onderste_spronggewricht_right"] = data["s_ank_right"];
-    data["t_onderste_spronggewricht_right"] = data["t_ank_right"];
+    data["s_onderste_spronggewricht_left"] = 0;
+    data["t_onderste_spronggewricht_left"] = 0;
+    data["s_onderste_spronggewricht_right"] = 0;
+    data["t_onderste_spronggewricht_right"] = 0;
 
     for (const key of Object.keys(data)) {
         const value = copy[key];
