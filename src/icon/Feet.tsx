@@ -3,6 +3,7 @@ import React from "react";
 const FeetIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
     return (
         <svg
+            fill="currentColor"
             {...props}
             width={12}
             xmlns="http://www.w3.org/2000/svg"

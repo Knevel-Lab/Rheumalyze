@@ -16,6 +16,9 @@ import {
     Triangle,
 } from "../RangeGraph";
 import { standardDeviation } from "@/utils/standardDeviation";
+import FeetIcon from "@/icon/Feet";
+import ThunderIcon from "@/icon/Thunder";
+import { DropFilled, HandRightFilled } from "@fluentui/react-icons";
 
 const pallete = [
     "#fd7f6f",
@@ -100,7 +103,8 @@ export function SwellingPainOverView({
                     value="1"
                     label={
                         <>
-                            Foot
+                            <FeetIcon />
+                            <span> Foot </span>
                             <br />
                             <Text size={200}>
                                 Relatively more joints in the feet are affected.
@@ -112,7 +116,8 @@ export function SwellingPainOverView({
                     value="2"
                     label={
                         <>
-                            Oligo
+                            <DropFilled />
+                            <span> Oligo </span>
                             <br />
                             <Text size={200}>
                                 Relatively more seropositive patients and <br />{" "}
@@ -125,7 +130,8 @@ export function SwellingPainOverView({
                     value="3"
                     label={
                         <>
-                            Hand
+                            <HandRightFilled />
+                            <span> Hand </span>
                             <br />
                             <Text size={200}>
                                 Symmetrical polyarthritis of hands with <br />{" "}
@@ -138,7 +144,8 @@ export function SwellingPainOverView({
                     value="4"
                     label={
                         <>
-                            Poly
+                            <ThunderIcon />
+                            <span> Poly </span>
                             <br />
                             <Text size={200}>
                                 Relative majority seronegative polyarthritis in
