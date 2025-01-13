@@ -169,7 +169,7 @@ export default function Index() {
                             <span>
                                 <b>Hint</b> Use{" "}
                                 <a
-                                    href="Rheumalyze/web_model/template.xlsx"
+                                    href="web_model/template.xlsx"
                                     target="_blank"
                                     download
                                 >
