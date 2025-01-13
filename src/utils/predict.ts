@@ -14,7 +14,7 @@ export function predict({
     onError: (error: any) => void;
 }) {
     try {
-        const worker = new Worker("/CRISP/web_model/predictWorker.js");
+        const worker = new Worker("/Rheumalyze/web_model/predictWorker.js");
 
         const pre_processed = data.map((x) => pre_process(x));
         worker.postMessage({ data: pre_processed });

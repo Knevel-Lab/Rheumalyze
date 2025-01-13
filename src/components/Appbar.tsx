@@ -23,7 +23,7 @@ export default function AppBar() {
         <div className={classes.div}>
             <Link style={{ textDecoration: "none" }} to={"/"}>
                 {" "}
-                <h1 className={classes.h1}> CRISP </h1>{" "}
+                <h1 className={classes.h1}> Rheumalyze </h1>{" "}
             </Link>
         </div>
     );
