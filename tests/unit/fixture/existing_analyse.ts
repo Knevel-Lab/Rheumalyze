@@ -6,7 +6,7 @@ import state from "./application_state.json" with { type: "json" };
 // We create a fixture that adds an existing application state to indexDB so that we can run the tests quicker.
 export const test = baseTest.extend({
     page: async ({ page }, use) => {
-        await page.goto("CRISP");
+        await page.goto("Rheumalyze");
 
         await page.evaluate((state) => {
             return new Promise((resolve, reject) => {
