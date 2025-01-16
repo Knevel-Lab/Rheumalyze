@@ -25,10 +25,12 @@ import { ChartToolbarWrapper } from "@/components/detail/ChartToolbarWrapper";
 import Group from "@/components/Group";
 import { SwellingPainOverView } from "@/components/detail/SwellingPainOverView";
 import { DetailUmapSettings } from "@/components/detail/detailUmapSettings";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import FeetIcon from "@/icon/Feet";
 import ThunderIcon from "@/icon/Thunder";
 import { getClusterColor } from "@/components/detail/clusterColerUtils";
+import { ToggableTag } from "@/components/reorder/ToggableTag";
+import { SelectableJIP } from "@/components/detail/SelectableJIP";
 
 const useClasses = makeStyles({
     div: {
@@ -59,24 +61,40 @@ export default function Details() {
     const navigate = useNavigate();
 
     const analyse = useGetAnalysesById(id);
-    const predictions = (analyse.prediction ?? []).filter(
-        (x) => x.prediction !== -1,
+
+    const predictions = useMemo(
+        () => (analyse.prediction ?? []).filter((x) => x.prediction !== -1),
+        [analyse.prediction],
     );
 
-    const data = analyse.files
-        .flatMap((x) => x.content)
-        .filter((_, i) => (analyse.prediction ?? [])[i].prediction !== -1);
+    const data = useMemo(
+        () =>
+            analyse.files
+                .flatMap((x) => x.content)
+                .filter(
+                    (_, i) => (analyse.prediction ?? [])[i].prediction !== -1,
+                ),
+        [analyse.files, analyse.prediction],
+    );
 
-    const clustering = predictions.map((x) => x.prediction);
-    const patients = predictions.map((x) => x.patientId);
+    const clustering = useMemo(
+        () => predictions.map((x) => x.prediction),
+        [predictions],
+    );
+    const patients = useMemo(
+        () => predictions.map((x) => x.patientId),
+        [predictions],
+    );
 
-    const counts = count(clustering);
+    const counts = useMemo(() => count(clustering), [clustering]);
 
     const [umapSettings, setUmapSettings] = useState({
         nNeighbors: data.length > 50 ? 30 : data.length / 2,
         minDist: 0.1,
         distanceFunction: "euclidean" as "euclidean" | "cosine",
     });
+
+    const [selected, setSelected] = useState<number[]>([1, 2, 3, 4]);
     return (
         <>
             <Breadcrumb>
@@ -101,33 +119,17 @@ export default function Details() {
                         <b>JIPs</b> <br /> <i>Joint involvement patterns</i>
                     </p>
 
-                    <p>
-                        <b style={{ fontSize: "x-large" }}>
-                            {" "}
-                            {counts.counts[1]}{" "}
-                        </b>{" "}
-                        <FeetIcon fill={getClusterColor(1)} /> Feet <br />
-                        <b style={{ fontSize: "x-large" }}>
-                            {" "}
-                            {counts.counts[2]}{" "}
-                        </b>{" "}
-                        <DropFilled color={getClusterColor(2)} /> Oligo <br />
-                        <b style={{ fontSize: "x-large" }}>
-                            {" "}
-                            {counts.counts[3]}{" "}
-                        </b>{" "}
-                        <HandRightFilled color={getClusterColor(3)} /> Hand{" "}
-                        <br />
-                        <b style={{ fontSize: "x-large" }}>
-                            {" "}
-                            {counts.counts[4]}{" "}
-                        </b>
-                        <ThunderIcon fill={getClusterColor(4)} /> Poly <br />
-                    </p>
+                    <SelectableJIP
+                        counts={counts.counts}
+                        onSelectionChanged={(x) => setSelected(x)}
+                    />
                 </div>
 
                 <ChartToolbarWrapper title="Distribution">
-                    <DonutChartWrapper counts={counts.counts} />
+                    <DonutChartWrapper
+                        counts={counts.counts}
+                        selected={selected}
+                    />
                 </ChartToolbarWrapper>
 
                 <ChartToolbarWrapper
@@ -147,6 +149,7 @@ export default function Details() {
                         clusters={clustering}
                         patientIds={patients}
                         settings={umapSettings}
+                        selected={selected}
                     />
                 </ChartToolbarWrapper>
             </Group>
