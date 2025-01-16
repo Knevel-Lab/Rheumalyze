@@ -25,8 +25,8 @@ export function DetailUmap({
     data,
     clusters,
     patientIds,
-    settings,
     selected,
+    settings,
 }: DetailUmapProps) {
     const [points, setPoints] = useState<Point[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +60,7 @@ export function DetailUmap({
         }
 
         doUmap().catch((e) => setError(e));
-    }, [patientIds, settings]);
+    }, [settings]);
 
     if (error !== null) {
         return (

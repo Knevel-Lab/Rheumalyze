@@ -14,11 +14,7 @@ import DetailDataGrid from "@/components/detail/detailDatagrid";
 import { DonutChartWrapper } from "@/components/detail/DonutChartWrapper";
 import { DetailUmap } from "@/components/detail/DetailUmap";
 
-import {
-    ArrowDownload24Regular,
-    DropFilled,
-    HandRightFilled,
-} from "@fluentui/react-icons";
+import { ArrowDownload24Regular } from "@fluentui/react-icons";
 import { exportJsonToExcel } from "@/utils/exportToExcel";
 import { ChartToolbarWrapper } from "@/components/detail/ChartToolbarWrapper";
 
@@ -26,10 +22,6 @@ import Group from "@/components/Group";
 import { SwellingPainOverView } from "@/components/detail/SwellingPainOverView";
 import { DetailUmapSettings } from "@/components/detail/detailUmapSettings";
 import { useMemo, useState } from "react";
-import FeetIcon from "@/icon/Feet";
-import ThunderIcon from "@/icon/Thunder";
-import { getClusterColor } from "@/components/detail/clusterColerUtils";
-import { ToggableTag } from "@/components/reorder/ToggableTag";
 import { SelectableJIP } from "@/components/detail/SelectableJIP";
 
 const useClasses = makeStyles({

@@ -1,5 +1,5 @@
 import { DonutChart, IChartProps } from "@fluentui/react-charting";
-import { getClusterColor, getSelectedClusterColor } from "./clusterColerUtils";
+import { getSelectedClusterColor } from "./clusterColerUtils";
 import { useMeasure } from "@uidotdev/usehooks";
 
 interface DonutChartWrapperProps {
