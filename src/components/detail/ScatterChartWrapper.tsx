@@ -1,11 +1,4 @@
-import { IChartProps, LineChart } from "@fluentui/react-charting";
 import { getClusterColor, getSelectedClusterColor } from "./clusterColerUtils";
-import { useMeasure } from "@uidotdev/usehooks";
-
-//Find way to hide vertical dashes and axis
-
-// With this there are no scrollbars and everything is visible
-import "./ScatterChartWrapper-hack.css";
 import { getJIPname } from "@/utils/jipUtils";
 
 interface ScatterChartWrapperProps {
@@ -42,7 +35,7 @@ export function ScatterChartWrapper({
                 <CustomHoverCardOutsideSVG
                     data={{
                         color: getClusterColor(point.cluster) ?? "white",
-                        legend: point.patientId.toString(),
+                        legend: point.patientId,
                         xValue: point.isOutlier ? "Outlier" : "",
                         yValue: getJIPname(point.cluster),
                     }}

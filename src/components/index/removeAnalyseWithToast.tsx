@@ -12,7 +12,6 @@ export const useRemoveAnalyseWithToast = () => {
     const { dispatchToast } = useToastController();
 
     const removeAnalyseWithToast = (id: number, name: string) => {
-        console.log("Called!");
         const undo = removeAnalyse(id);
 
         dispatchToast(

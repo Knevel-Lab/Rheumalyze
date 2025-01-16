@@ -30,7 +30,6 @@ export function SelectableJIP({
 
     useEffect(() => {
         onSelectionChanged(selected as (1 | 2 | 3 | 4)[]);
-        console.log(selected);
     }, [selected, onSelectionChanged]);
 
     return itemConfig.map((x, index) => {
