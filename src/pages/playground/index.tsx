@@ -175,6 +175,7 @@ export default function Index() {
                         clusters={clusters}
                         patientIds={patientIds}
                         settings={umapSettings}
+                        selected={[1, 2, 3, 4]}
                     />
                 </ChartToolbarWrapper>
             </Group>

@@ -17,7 +17,7 @@ interface DetailUmapProps {
     data: any[];
     clusters: number[];
     patientIds: string[];
-
+    selected: number[];
     settings?: UMAPsettings;
 }
 
@@ -25,6 +25,7 @@ export function DetailUmap({
     data,
     clusters,
     patientIds,
+    selected,
     settings,
 }: DetailUmapProps) {
     const [points, setPoints] = useState<Point[]>([]);
@@ -59,7 +60,7 @@ export function DetailUmap({
         }
 
         doUmap().catch((e) => setError(e));
-    }, [data, clusters, patientIds, settings]);
+    }, [settings]);
 
     if (error !== null) {
         return (
@@ -115,7 +116,7 @@ export function DetailUmap({
                         height: "inherit",
                     }}
                 >
-                    <ScatterChartWrapper points={points} />
+                    <ScatterChartWrapper points={points} selected={selected} />
                 </div>
             )}
         </>

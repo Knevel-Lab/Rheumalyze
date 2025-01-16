@@ -1,15 +1,9 @@
-import { IChartProps, LineChart } from "@fluentui/react-charting";
-import { getClusterColor } from "./clusterColerUtils";
-import { useMeasure } from "@uidotdev/usehooks";
-
-//Find way to hide vertical dashes and axis
-
-// With this there are no scrollbars and everything is visible
-import "./ScatterChartWrapper-hack.css";
+import { getClusterColor, getSelectedClusterColor } from "./clusterColerUtils";
 import { getJIPname } from "@/utils/jipUtils";
 
 interface ScatterChartWrapperProps {
     points: Point[];
+    selected: number[];
 }
 
 interface Point {
@@ -20,39 +14,45 @@ interface Point {
     isOutlier: boolean;
 }
 
-export function ScatterChartWrapper({ points }: ScatterChartWrapperProps) {
-    const [ref, { width, height }] = useMeasure();
+import MinMaxScaler from "@/utils/minMaxScaler";
+import CustomHoverCardOutsideSVG from "../CustomHoverCardOutsideSVG";
 
-    const yMax = Math.max(...points.map((x) => x.y));
-    const yMin = Math.min(...points.map((x) => x.y));
-
-    const data: IChartProps = {
-        chartTitle: "Line Chart",
-        lineChartData: points.map((x) => ({
-            data: [
-                {
-                    x: x.x,
-                    y: x.y,
-                    xAxisCalloutData: x.isOutlier ? "Outlier" : "No outlier",
-                    yAxisCalloutData: getJIPname(x.cluster),
-                },
-            ],
-            legend: x.patientId,
-            color: getClusterColor(x.cluster),
-        })),
-    };
+export function ScatterChartWrapper({
+    points,
+    selected,
+}: ScatterChartWrapperProps) {
+    // Scale every point between 5 and 95 so there is always a 5% margin in the chart.
+    const scaledX = new MinMaxScaler(5, 95).fitTransform(
+        points.map((x) => x.x),
+    );
+    const scaledY = new MinMaxScaler(5, 95).fitTransform(
+        points.map((x) => x.y),
+    );
 
     return (
-        <div ref={ref} style={{ height: "100%" }}>
-            <LineChart
-                data={data}
-                hideLegend
-                width={width ?? 160}
-                height={height ?? 160}
-                enableReflow={true}
-                yMaxValue={yMax}
-                yMinValue={yMin}
-            />
-        </div>
+        <svg width={"100%"} height={"100%"} viewBox="0 0 100 100">
+            {points.map((point, i) => (
+                <CustomHoverCardOutsideSVG
+                    data={{
+                        color: getClusterColor(point.cluster) ?? "white",
+                        legend: point.patientId,
+                        xValue: point.isOutlier ? "Outlier" : "",
+                        yValue: getJIPname(point.cluster),
+                    }}
+                >
+                    {/* Use path here so that when scaling the chart, the points dont grow. */}
+                    <path
+                        d={`M ${scaledX[i]} ${scaledY[i]} l 0.0001 0`}
+                        vectorEffect="non-scaling-stroke"
+                        strokeWidth="10"
+                        strokeLinecap="round"
+                        stroke={getSelectedClusterColor(
+                            point.cluster,
+                            selected,
+                        )}
+                    />
+                </CustomHoverCardOutsideSVG>
+            ))}
+        </svg>
     );
 }

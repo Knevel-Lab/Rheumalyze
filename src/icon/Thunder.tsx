@@ -5,7 +5,7 @@ const ThunderIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
         <svg
             fill="currentColor"
             {...props}
-            width={12}
+            width={props.width ?? 12}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"
         >

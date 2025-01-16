@@ -1,25 +1,35 @@
 class MinMaxScaler {
-    private min: number;
-    private max: number;
+    private dataMin: number;
+    private dataMax: number;
+    private rangeMin: number;
+    private rangeMax: number;
 
-    constructor() {
-        this.min = 0;
-        this.max = 1;
+    constructor(rangeMin: number = 0, rangeMax: number = 1) {
+        this.dataMin = 0;
+        this.dataMax = 1;
+        this.rangeMin = rangeMin;
+        this.rangeMax = rangeMax;
     }
 
     fit(data: number[]): void {
-        this.min = Math.min(...data);
-        this.max = Math.max(...data);
+        this.dataMin = Math.min(...data);
+        this.dataMax = Math.max(...data);
     }
 
     transform(data: number[]): number[] {
-        const range = this.max - this.min;
-        if (range === 0) {
-            // All values are the same, return an array of zeros
-            return data.map(() => 0);
+        const dataRange = this.dataMax - this.dataMin;
+        const targetRange = this.rangeMax - this.rangeMin;
+
+        if (dataRange === 0) {
+            // All values are the same, map everything to rangeMin
+            return data.map(() => this.rangeMin);
         }
+
         return data.map((value) => {
-            return (value - this.min) / range;
+            return (
+                ((value - this.dataMin) / dataRange) * targetRange +
+                this.rangeMin
+            );
         });
     }
 
@@ -29,12 +39,18 @@ class MinMaxScaler {
     }
 
     inverseTransform(scaledData: number[]): number[] {
-        const range = this.max - this.min;
-        if (range === 0) {
-            return scaledData.map(() => this.min);
+        const dataRange = this.dataMax - this.dataMin;
+        const targetRange = this.rangeMax - this.rangeMin;
+
+        if (dataRange === 0) {
+            return scaledData.map(() => this.dataMin);
         }
+
         return scaledData.map((value) => {
-            return value * range + this.min;
+            return (
+                ((value - this.rangeMin) / targetRange) * dataRange +
+                this.dataMin
+            );
         });
     }
 }

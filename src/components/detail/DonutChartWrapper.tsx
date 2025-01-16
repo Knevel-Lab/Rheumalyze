@@ -1,5 +1,5 @@
 import { DonutChart, IChartProps } from "@fluentui/react-charting";
-import { getClusterColor } from "./clusterColerUtils";
+import { getSelectedClusterColor } from "./clusterColerUtils";
 import { useMeasure } from "@uidotdev/usehooks";
 
 interface DonutChartWrapperProps {
@@ -9,18 +9,37 @@ interface DonutChartWrapperProps {
         3: number;
         4: number;
     };
+    selected: number[];
 }
 
-export function DonutChartWrapper({ counts }: DonutChartWrapperProps) {
+export function DonutChartWrapper({
+    counts,
+    selected,
+}: DonutChartWrapperProps) {
     const [ref, { width, height }] = useMeasure();
-
     const data: IChartProps = {
         chartTitle: "OVerview per JIP",
         chartData: [
-            { legend: "Feet", data: counts[1], color: getClusterColor(1) },
-            { legend: "Oligo", data: counts[2], color: getClusterColor(2) },
-            { legend: "Hand", data: counts[3], color: getClusterColor(3) },
-            { legend: "Poly", data: counts[4], color: getClusterColor(4) },
+            {
+                legend: "Feet",
+                data: counts[1],
+                color: getSelectedClusterColor(1, selected),
+            },
+            {
+                legend: "Oligo",
+                data: counts[2],
+                color: getSelectedClusterColor(2, selected),
+            },
+            {
+                legend: "Hand",
+                data: counts[3],
+                color: getSelectedClusterColor(3, selected),
+            },
+            {
+                legend: "Poly",
+                data: counts[4],
+                color: getSelectedClusterColor(4, selected),
+            },
         ],
     };
 
