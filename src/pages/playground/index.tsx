@@ -1,11 +1,20 @@
-import { ChartToolbarWrapper } from "@/components/detail/ChartToolbarWrapper";
-import { DetailUmap } from "@/components/detail/DetailUmap";
-import { DetailUmapSettings } from "@/components/detail/detailUmapSettings";
 import Group from "@/components/Group";
 import { ClickableMannequin } from "@/components/Mannequin/ClickableMannequin";
 import { MinMax } from "@/components/MinMaxSlider";
+import { getJIPname } from "@/utils/jipUtils";
 import { predict } from "@/utils/predict";
-import { Button, Spinner, Switch } from "@fluentui/react-components";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogBody,
+    DialogContent,
+    DialogSurface,
+    DialogTitle,
+    DialogTrigger,
+    Spinner,
+    Switch,
+} from "@fluentui/react-components";
 import { useState } from "react";
 
 interface Joints {
@@ -14,16 +23,6 @@ interface Joints {
 }
 
 export default function Index() {
-    const [umapSettings, setUmapSettings] = useState({
-        nNeighbors: 1,
-        minDist: 0.1,
-        distanceFunction: "euclidean" as "euclidean" | "cosine",
-    });
-
-    const [datas, setDatas] = useState<any[]>([]);
-    const [clusters, setClusters] = useState<any[]>([]);
-    const [patientIds, setPatientIds] = useState<string[]>([]);
-
     const [leuko, setLeuko] = useState<number>(0);
     const [hb, setHb] = useState<number>(0);
     const [mcv, setMcv] = useState<number>(0);
@@ -66,10 +65,9 @@ export default function Index() {
         predict({
             data,
             onComplete: (result) => {
-                setDatas([...datas, data]);
-                setClusters([...clusters, result[0].prediction as Number]);
-                setPatientIds([...patientIds, datas.length.toString()]);
                 setLoading(false);
+                setPrediction(result[0].prediction);
+                setOpen(true);
             },
             onError: (error) => {
                 console.log(error);
@@ -79,8 +77,44 @@ export default function Index() {
         });
     }
 
+    const [open, setOpen] = useState(false);
+    const [prediction, setPrediction] = useState(0);
+
+    if (loading) {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    justifyItems: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}
+            >
+                <Spinner size="extra-large" />
+                <h3>Predicting</h3>
+            </div>
+        );
+    }
+
     return (
         <>
+            <Dialog open={open} onOpenChange={(_, data) => setOpen(data.open)}>
+                <DialogSurface>
+                    <DialogBody>
+                        <DialogTitle>Result</DialogTitle>
+                        <DialogContent>
+                            This patients belongs to the{" "}
+                            {getJIPname(prediction)} JIP phenotype
+                        </DialogContent>
+                        <DialogActions>
+                            <DialogTrigger disableButtonEnhancement>
+                                <Button appearance="primary">Close</Button>
+                            </DialogTrigger>
+                        </DialogActions>
+                    </DialogBody>
+                </DialogSurface>
+            </Dialog>
+
             <Group childHeight="550px" childWidth="400px">
                 <div>
                     <h1>Numeric </h1>
@@ -151,34 +185,9 @@ export default function Index() {
                 style={{ marginTop: "12px", marginBottom: "12px" }}
                 appearance="primary"
                 onClick={() => DoPrediction()}
-                disabled={loading}
-                icon={loading ? <Spinner size="tiny" /> : undefined}
             >
-                {loading ? "Simulating..." : "Simulate"}
+                Predict
             </Button>
-
-            <Group childHeight="400px" childWidth="800px">
-                <ChartToolbarWrapper
-                    title="UMAP"
-                    settings={
-                        <DetailUmapSettings
-                            initialSettings={umapSettings}
-                            maxNeighbors={datas.length - 1}
-                            onSettingChange={(newSettings) => {
-                                setUmapSettings(newSettings);
-                            }}
-                        />
-                    }
-                >
-                    <DetailUmap
-                        data={datas}
-                        clusters={clusters}
-                        patientIds={patientIds}
-                        settings={umapSettings}
-                        selected={[1, 2, 3, 4]}
-                    />
-                </ChartToolbarWrapper>
-            </Group>
         </>
     );
 }
