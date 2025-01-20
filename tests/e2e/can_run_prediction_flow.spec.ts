@@ -29,6 +29,16 @@ const testCases = [
         files: "tests\\input\\dummy_data_with_legend_and_multiple_tabs.xlsx",
         expectedText: "26 Feet 25 Oligo 43 Hand 106 Poly",
     },
+    {
+        name: "empty records",
+        files: "tests\\input\\dummy_data_with_empty_records.csv",
+        expectedText: "2 Feet 1 Oligo 1 Hand 0 Poly",
+    },
+    {
+        name: "additonal whitespace in columnnames",
+        files: "tests\\input\\dummy_data_with_white_space_columnames.csv",
+        expectedText: "2 Feet 1 Oligo 1 Hand 0 Poly",
+    },
 ];
 
 test.describe("File upload and prediction tests", () => {

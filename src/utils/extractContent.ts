@@ -3,8 +3,10 @@ import * as XLSX from "xlsx";
 
 export default async function ExtractContent(file: File): Promise<any[]> {
     // Sometimes all data is returned as string, while they are numbers. So try to make everything that could be a number a number.
-    return (await extractFromFile(file)).map((x) =>
-        tryConvertPropertiesToNumber(x),
+    return filterEmptyRecords(
+        (await extractFromFile(file)).map((x) =>
+            removeWhiteSpaceFromPropertyNames(tryConvertPropertiesToNumber(x)),
+        ),
     );
 }
 
@@ -67,6 +69,30 @@ async function ExtractXLSX(file: File): Promise<any[]> {
         reader.onerror = (error) => reject(error);
         reader.readAsArrayBuffer(file);
     });
+}
+
+function filterEmptyRecords(list: Array<any>): Array<any> {
+    return list.filter((item) => {
+        return !Object.values(item).every((value) => value === 0);
+    });
+}
+
+function removeWhiteSpaceFromPropertyNames(obj: any): any {
+    if (Array.isArray(obj)) {
+        return obj.map((item) => removeWhiteSpaceFromPropertyNames(item));
+    } else if (obj !== null && typeof obj === "object") {
+        const newObj: any = {};
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                const trimmedKey = key.trim();
+                newObj[trimmedKey] = removeWhiteSpaceFromPropertyNames(
+                    obj[key],
+                );
+            }
+        }
+        return newObj;
+    }
+    return obj;
 }
 
 function tryConvertPropertiesToNumber(obj: any): any {
