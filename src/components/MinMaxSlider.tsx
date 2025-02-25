@@ -5,6 +5,7 @@ import {
     makeStyles,
     Tooltip,
     Slider,
+    Input,
 } from "@fluentui/react-components";
 import { useState, useEffect } from "react";
 
@@ -12,6 +13,7 @@ const useStyles = makeStyles({
     wrapper: {
         display: "flex",
         alignItems: "center",
+        gap: "2px",
     },
 });
 
@@ -41,6 +43,13 @@ export const MinMax: React.FC<MinMaxProps> = ({
     const isMounted = React.useRef(false);
 
     const handleChange = (_: unknown, data: { value: number }) => {
+        if (data.value > max) {
+            handleChange(_, { value: max });
+        }
+        if (data.value > min) {
+            handleChange(_, { value: min });
+        }
+
         setValue(data.value);
         if (onChange && isMounted.current) {
             onChange(data.value);
@@ -53,9 +62,23 @@ export const MinMax: React.FC<MinMaxProps> = ({
     }, []);
 
     return (
-        <>
+        <div style={{ marginBottom: "10px" }}>
             <Label htmlFor={id}>{label}</Label>
+
             <div className={styles.wrapper}>
+                <Input
+                    style={{
+                        width: "75px",
+                    }}
+                    type="number"
+                    min={min}
+                    max={max}
+                    value={value.toString()}
+                    onChange={(_, data) => {
+                        handleChange(_, { value: Number(data.value) });
+                    }}
+                ></Input>
+
                 <Label aria-hidden>{min}</Label>
                 <Tooltip
                     content={value.toString()}
@@ -76,6 +99,6 @@ export const MinMax: React.FC<MinMaxProps> = ({
                 </Tooltip>
                 <Label aria-hidden>{max}</Label>
             </div>
-        </>
+        </div>
     );
 };
