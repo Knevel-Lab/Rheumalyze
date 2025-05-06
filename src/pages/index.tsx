@@ -55,6 +55,12 @@ export default function Index() {
                 >
                     Create new
                 </Button>
+                <Button
+                    appearance="secondary"
+                    onClick={() => navigate("/playground")}
+                >
+                    Test a single Case
+                </Button>
             </div>
 
             {analyses.length !== 0 ? (

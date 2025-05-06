@@ -1,6 +1,7 @@
 import Group from "@/components/Group";
 import { ClickableMannequin } from "@/components/Mannequin/ClickableMannequin";
 import { MinMax } from "@/components/MinMaxSlider";
+import { useNavigate } from "@/router";
 import { getJIPname } from "@/utils/jipUtils";
 import { predict } from "@/utils/predict";
 import {
@@ -14,7 +15,15 @@ import {
     DialogTrigger,
     Spinner,
     Switch,
+    Field,
+    Radio,
+    RadioGroup,
+    Breadcrumb,
+    BreadcrumbButton,
+    BreadcrumbDivider,
+    BreadcrumbItem,
 } from "@fluentui/react-components";
+import { AddCircleFilled, SubtractCircleFilled } from "@fluentui/react-icons";
 import { useState } from "react";
 
 interface Joints {
@@ -79,7 +88,7 @@ export default function Index() {
 
     const [open, setOpen] = useState(false);
     const [prediction, setPrediction] = useState(0);
-
+    const navigate = useNavigate();
     if (loading) {
         return (
             <div
@@ -98,6 +107,20 @@ export default function Index() {
 
     return (
         <>
+            <Breadcrumb>
+                <BreadcrumbItem>
+                    <BreadcrumbButton onClick={() => navigate("/")}>
+                        My analyses
+                    </BreadcrumbButton>
+                </BreadcrumbItem>
+                <BreadcrumbDivider />
+                <BreadcrumbItem>
+                    <BreadcrumbButton current>
+                        Test a single case
+                    </BreadcrumbButton>
+                </BreadcrumbItem>
+            </Breadcrumb>
+
             <Dialog open={open} onOpenChange={(_, data) => setOpen(data.open)}>
                 <DialogSurface>
                     <DialogBody>
@@ -152,17 +175,49 @@ export default function Index() {
                 </div>
                 <div>
                     <h1>Categoric </h1>
-                    <Switch
-                        label="Sex"
-                        onChange={(_, data) => setSex(data.checked ? "M" : "F")}
-                    />
+                    <Field label="Sex">
+                        <RadioGroup
+                            layout="horizontal"
+                            onChange={(_, d) => setSex(d.value as "M" | "F")}
+                        >
+                            <Radio value="M" label="Male" defaultChecked />
+                            <Radio value="F" label="Female" />
+                        </RadioGroup>
+                    </Field>
                     <Switch
                         label="RF"
                         onChange={(_, data) => setRf(data.checked ? 1 : 0)}
-                    />
+                        indicator={
+                            rf ? (
+                                <div>
+                                    {" "}
+                                    <AddCircleFilled />{" "}
+                                </div>
+                            ) : (
+                                <div>
+                                    {" "}
+                                    <SubtractCircleFilled />{" "}
+                                </div>
+                            )
+                        }
+                    />{" "}
+                    <br />
                     <Switch
                         label="ACPA"
                         onChange={(_, data) => setAccp(data.checked ? 1 : 0)}
+                        indicator={
+                            accp ? (
+                                <div>
+                                    {" "}
+                                    <AddCircleFilled />{" "}
+                                </div>
+                            ) : (
+                                <div>
+                                    {" "}
+                                    <SubtractCircleFilled />{" "}
+                                </div>
+                            )
+                        }
                     />
                 </div>
 

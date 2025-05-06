@@ -1,5 +1,5 @@
 # Rheumalyze
-This projects provides a client-based webtool that identifies different RA phenotypes based baseline metrics using on device machine learning.  
+This project provides a client-based webtool tool that classifies rheumatoid arthritis into four distinct phenotypes based on initial clinical presentation, that were primarily characterized by their unique joint involvement pattern (JIP): feet, oligoarticular, hand, and polyarticular distribution.
 
 ## Features
  - local only
@@ -8,11 +8,11 @@ This projects provides a client-based webtool that identifies different RA pheno
 ## Installation
 1. Clone the repository:
    ```
-   git clone https://github.com/username/awesomeproject.git
+   git clone https://github.com/Knevel-Lab/Rheumalyze.git
    ```
 2. Navigate to the project directory:
    ```
-   cd awesomeproject
+   cd Rheumalyze
    ```
 3. Install dependencies:
    ```
