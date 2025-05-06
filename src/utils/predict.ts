@@ -45,12 +45,12 @@ export function predict({
 
 // Preprocess by duplicating keys with t or s into _positieve and _negatieve and reorder as expected by the model.
 function pre_process(data: FileInput) {
-    const copy = { ...data };
-
     data["s_onderste_spronggewricht_left"] = 0;
     data["t_onderste_spronggewricht_left"] = 0;
     data["s_onderste_spronggewricht_right"] = 0;
     data["t_onderste_spronggewricht_right"] = 0;
+
+    const copy = { ...data };
 
     for (const key of Object.keys(data)) {
         const value = copy[key];
