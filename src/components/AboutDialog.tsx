@@ -29,7 +29,7 @@ export const AboutDialog = () => {
                         Rheumalyze is based on{" "}
                         <Link
                             target="#"
-                            href="https://doi.org/10.1101/2023.09.19.23295482"
+                            href="https://doi.org/10.1038/s41746-025-01997-1"
                         >
                             {" "}
                             this research{" "}
