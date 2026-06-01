@@ -1,32 +1,37 @@
 # Rheumalyze
+
 This project provides a client-based webtool tool that classifies rheumatoid arthritis into four distinct phenotypes based on initial clinical presentation, that were primarily characterized by their unique joint involvement pattern (JIP): feet, oligoarticular, hand, and polyarticular distribution.
 
 ## Features
- - local only
- - interactive visualsations
+
+-   local only
+-   interactive visualizations
 
 ## Installation
+
 1. Clone the repository:
-   ```
-   git clone https://github.com/Knevel-Lab/Rheumalyze.git
-   ```
+    ```
+    git clone https://github.com/Knevel-Lab/Rheumalyze.git
+    ```
 2. Navigate to the project directory:
-   ```
-   cd Rheumalyze
-   ```
+    ```
+    cd Rheumalyze
+    ```
 3. Install dependencies:
-   ```
-   npm install
-   ```
+    ```
+    npm install
+    ```
 4. Run development server
-   ```
-   npm run dev
-   ```
+
+    ```
+    npm run dev
+    ```
 
 5. (optional) Export to static HTML/CSS/JS
-   ```
-   npm run build
-   ```
- 
+    ```
+    npm run build
+    ```
+
 ## References
-1.	Location of joint involvement differentiates Rheumatoid arthritis into different clinical subsets Tjardo D. Maarseveen, Marc P. Maurits, Nils Steinz, Sytske Anne Bergstra, Bianca Boxma-de Klerk, Annette H. M. van der Helm-van Mil, Cornelia F. Allaart, Marcel J. T. Reinders, Tom W J Huizinga, Erik B van den Akker, Rachel Knevel medRxiv 2023.09.19.23295482; doi: https://doi.org/10.1101/2023.09.19.23295482
+
+1. Maarseveen, T.D., Maurits, M.P., Coletto, L.A. et al. Location and amount of joint involvement differentiates rheumatoid arthritis into different clinical subsets. npj Digit. Med. 8, 623 (2025). https://doi.org/10.1038/s41746-025-01997-1
