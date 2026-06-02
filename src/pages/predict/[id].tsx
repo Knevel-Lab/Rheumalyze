@@ -23,7 +23,7 @@ export default function Predict() {
         [analyse],
     );
     // FIX 1: Turn latentFactorArray into a reactive state variable instead of an empty constant array
-    const [latentFactorArray, setLatentFactorArray] = useState<any[]>([]);
+    //const [latentFactorArray, setLatentFactorArray] = useState<any[]>([]);
 
     useEffect(() => {
         if (analyse.prediction !== undefined) {

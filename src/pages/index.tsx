@@ -34,10 +34,10 @@ const useClasses = makeStyles({
 });
 
 export default function Index() {
+    delete (window as any).latentFactorArray; //
     const classes = useClasses();
     const navigate = useNavigate();
     const analyses = useAnalyses();
-    delete (window as any).latentFactorArray; //
 
     return (
         <>
