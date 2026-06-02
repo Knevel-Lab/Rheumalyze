@@ -37,6 +37,7 @@ export default function Index() {
     const classes = useClasses();
     const navigate = useNavigate();
     const analyses = useAnalyses();
+    delete (window as any).latentFactorArray; //
 
     return (
         <>

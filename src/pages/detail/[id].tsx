@@ -160,7 +160,7 @@ export default function Details() {
             >
                 <h1>Patients</h1>
                 <Toolbar
-                    aria-label="Default"
+                    aria-label="Patient Export"
                     style={{
                         display: "flex",
                         justifyContent: "left",
@@ -183,9 +183,59 @@ export default function Details() {
             <div className={classes.datagrid}>
                 <DetailDataGrid items={analyse.prediction ?? []} />
             </div>
+
+            {/* FIX: Wrapped sibling elements in a single fragment root element */}
+            {(window as any).latentFactorArray && (
+                <>
+                    <h3>
+                        You can download the raw latent factors (it wont be
+                        saved after this session):{" "}
+                    </h3>
+                    <div style={{ marginTop: "24px" }}>
+                        <Toolbar aria-label="Latent Space Export">
+                            <ToolbarButton
+                                icon={<ArrowDownload24Regular />}
+                                onClick={() => {
+                                    const formattedData = (
+                                        window as any
+                                    ).latentFactorArray.map(
+                                        (item: any, index: number) => {
+                                            const flatFactors = item.flat();
+                                            return {
+                                                Index: index + 1,
+                                                ...flatFactors.reduce(
+                                                    (
+                                                        acc: any,
+                                                        val: any,
+                                                        i: number,
+                                                    ) => {
+                                                        acc[`Factor ${i + 1}`] =
+                                                            val;
+                                                        return acc;
+                                                    },
+                                                    {},
+                                                ),
+                                            };
+                                        },
+                                    );
+
+                                    exportJsonToExcel(
+                                        formattedData,
+                                        "Latent Space",
+                                        "LatentSpace.xlsx",
+                                    );
+                                }}
+                            >
+                                (Download raw Latent Factors)
+                            </ToolbarButton>
+                        </Toolbar>
+                    </div>
+                </>
+            )}
         </>
     );
 }
+
 function count(data: number[]) {
     const counts = { 1: 0, 2: 0, 3: 0, 4: 0 };
     let sum = data.length;

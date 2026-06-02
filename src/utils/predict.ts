@@ -10,7 +10,7 @@ export function predict({
 }: {
     data: FileInput[];
     onProgress: (type: string, index: number, total: number) => void;
-    onComplete: (predictions: any) => void;
+    onComplete: (predictions: any, latentFactorArray: any) => void;
     onError: (error: any) => void;
 }) {
     try {
@@ -20,12 +20,14 @@ export function predict({
         worker.postMessage({ data: pre_processed });
 
         worker.onmessage = (event) => {
-            const { type, index, total, predictions } = event.data;
+            const { type, index, total, predictions, latentFactorArray } =
+                event.data;
 
             if (type === "loading" || type === "progress") {
                 onProgress(type, index, total);
             } else if (type === "done") {
-                onComplete(predictions);
+                onComplete(predictions, latentFactorArray);
+                console.log("LF when done:", latentFactorArray);
                 worker.terminate();
             }
         };

@@ -22,6 +22,8 @@ export default function Predict() {
         () => analyse.files.flatMap((x) => x.content),
         [analyse],
     );
+    // FIX 1: Turn latentFactorArray into a reactive state variable instead of an empty constant array
+    const [latentFactorArray, setLatentFactorArray] = useState<any[]>([]);
 
     useEffect(() => {
         if (analyse.prediction !== undefined) {
@@ -39,8 +41,17 @@ export default function Predict() {
                     ),
                 );
             },
-            onComplete: (predictions) => {
+            onComplete: (predictions, latentFactorArray) => {
                 addPrediction(id, predictions);
+
+                // FIX 2: Correctly save the incoming background data to state
+                console.log(
+                    "Latent factors in predict new: ",
+                    latentFactorArray,
+                );
+                // Quick QC Link: Attach to window right before navigating
+                (window as any).latentFactorArray = latentFactorArray;
+
                 navigate("/detail/:id", { params: { id: id.toString() } });
             },
             onError: (error) => {

@@ -35,12 +35,15 @@ self.onmessage = async function (event) {
     self.postMessage({ type: "loaded" });
 
     const predictions = [];
+    const latentFactorArray = [];
     for (let index = 0; index < data.length; index++) {
         const x = data[index];
         const patientId = x[0];
         try {
-            const prediction = simple.predict(model, x).toJs()[0] + 1; // + 1 since in the python code 0 == cluster.1
+            model_output = simple.predict(model, x).toJs();
+            const prediction = model_output[0][0] + 1; // + 1 since in the python code 0 == cluster.1
             predictions.push({ patientId, prediction: prediction });
+            latentFactorArray.push(model_output[1]);
         } catch (error) {
             console.log(`Error during prediction ${patientId}: ${error}`);
             predictions.push({ patientId, prediction: -1 });
@@ -54,7 +57,7 @@ self.onmessage = async function (event) {
             total: data.length,
         });
     }
-    self.postMessage({ type: "done", predictions });
+    self.postMessage({ type: "done", predictions, latentFactorArray });
 };
 
 async function loadPyodideWithEverything() {

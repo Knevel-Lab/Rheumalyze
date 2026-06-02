@@ -48,6 +48,13 @@ export default function Index() {
 
     const [loading, setLoading] = useState<boolean>(false);
 
+    // FIX 1: Turn latentFactorArray into a reactive state variable instead of an empty constant array
+    const [latentFactorArray, setLatentFactorArray] = useState<any[]>([]);
+
+    const [open, setOpen] = useState(false);
+    const [prediction, setPrediction] = useState(0);
+    const navigate = useNavigate();
+
     const data = [
         {
             "Patient number": "0000",
@@ -69,13 +76,32 @@ export default function Index() {
         },
     ];
 
+    const downloadCSV = (factors: any[]) => {
+        if (!factors || factors.length === 0) {
+            alert("No latent factors available to download yet!");
+            return;
+        }
+        const csvContent = factors.join(",");
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "latent_factors.csv";
+        link.click();
+    };
+
     function DoPrediction() {
         setLoading(true);
         predict({
             data,
-            onComplete: (result) => {
+            onComplete: (predictions, incomingFactors) => {
+                setPrediction(predictions[0].prediction);
+
+                // FIX 2: Correctly save the incoming background data to state
+                setLatentFactorArray(incomingFactors || []);
+
                 setLoading(false);
-                setPrediction(result[0].prediction);
+
+                // FIX 3: Open the Dialog popup so the user can see the download button!
                 setOpen(true);
             },
             onError: (error) => {
@@ -86,9 +112,6 @@ export default function Index() {
         });
     }
 
-    const [open, setOpen] = useState(false);
-    const [prediction, setPrediction] = useState(0);
-    const navigate = useNavigate();
     if (loading) {
         return (
             <div
@@ -126,10 +149,19 @@ export default function Index() {
                     <DialogBody>
                         <DialogTitle>Result</DialogTitle>
                         <DialogContent>
-                            This patients belongs to the{" "}
-                            {getJIPname(prediction)} JIP phenotype
+                            This patient belongs to the{" "}
+                            <strong>{getJIPname(prediction)}</strong> JIP
+                            phenotype!!
                         </DialogContent>
+
                         <DialogActions>
+                            <Button
+                                appearance="outline"
+                                onClick={() => downloadCSV(latentFactorArray)}
+                            >
+                                Download coordinates on patient embedding (CSV)
+                            </Button>
+
                             <DialogTrigger disableButtonEnhancement>
                                 <Button appearance="primary">Close</Button>
                             </DialogTrigger>
@@ -190,17 +222,15 @@ export default function Index() {
                         indicator={
                             rf ? (
                                 <div>
-                                    {" "}
-                                    <AddCircleFilled />{" "}
+                                    <AddCircleFilled />
                                 </div>
                             ) : (
                                 <div>
-                                    {" "}
-                                    <SubtractCircleFilled />{" "}
+                                    <SubtractCircleFilled />
                                 </div>
                             )
                         }
-                    />{" "}
+                    />
                     <br />
                     <Switch
                         label="ACPA"
@@ -208,13 +238,11 @@ export default function Index() {
                         indicator={
                             accp ? (
                                 <div>
-                                    {" "}
-                                    <AddCircleFilled />{" "}
+                                    <AddCircleFilled />
                                 </div>
                             ) : (
                                 <div>
-                                    {" "}
-                                    <SubtractCircleFilled />{" "}
+                                    <SubtractCircleFilled />
                                 </div>
                             )
                         }
@@ -225,14 +253,12 @@ export default function Index() {
                     <h1>Swelling </h1>
                     <ClickableMannequin
                         onSelectionChange={(x) => setSwelling(x)}
-                    ></ClickableMannequin>
+                    />
                 </div>
 
                 <div>
                     <h1>Pain </h1>
-                    <ClickableMannequin
-                        onSelectionChange={(x) => setPain(x)}
-                    ></ClickableMannequin>
+                    <ClickableMannequin onSelectionChange={(x) => setPain(x)} />
                 </div>
             </Group>
 
