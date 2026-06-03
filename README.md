@@ -4,8 +4,9 @@ This project provides a client-based webtool tool that classifies rheumatoid art
 
 ## Features
 
--   local only
--   interactive visualizations
+-   Runs locally (your data never leaves your PC)
+-   Interactive visualizations
+-   Upload a CSV with multiple patients (Or enter a single patient for clustering)
 
 ## Installation
 
@@ -35,3 +36,7 @@ This project provides a client-based webtool tool that classifies rheumatoid art
 ## References
 
 1. Maarseveen, T.D., Maurits, M.P., Coletto, L.A. et al. Location and amount of joint involvement differentiates rheumatoid arthritis into different clinical subsets. npj Digit. Med. 8, 623 (2025). https://doi.org/10.1038/s41746-025-01997-1
+
+## Note: Latent factors
+
+You can also download the raw latent factor coordinates directly after a run instead of using the hard cluster labels. Since these coordinates are not stored after the session ends, download them as a CSV (bottom of the page) immediately after the analysis completes.
