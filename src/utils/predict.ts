@@ -27,7 +27,7 @@ export function predict({
                 onProgress(type, index, total);
             } else if (type === "done") {
                 onComplete(predictions, latentFactorArray);
-                console.log("LF when done:", latentFactorArray);
+                //console.log("LF when done:", latentFactorArray);
                 worker.terminate();
             }
         };

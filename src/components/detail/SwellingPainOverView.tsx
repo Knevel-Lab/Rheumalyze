@@ -80,18 +80,25 @@ export function SwellingPainOverView({
     data,
     clusters,
 }: SwellingPainOverViewProps) {
+    //console.log('Number:', data, clusters)
     const [filtering, setFiltering] = useState<number | null>(null);
 
     const filtered_data = applyFiltering(data, clusters, filtering);
 
-    const [swelling, pain] = seperateZwellingAndPijn(filtered_data);
-    const averageSwelling = MeanOfRecord(swelling);
-    const averagePain = MeanOfRecord(pain);
+    // CRASH GUARD HELPERS: Precompute conditions safely
+    const hasData = filtered_data && filtered_data.length > 0;
 
-    const averages = MeanOfRecord(filtered_data);
+    // Run calculations safely only if data exists to avoid runtime crashes
+    const [swelling, pain] = hasData
+        ? seperateZwellingAndPijn(filtered_data)
+        : [[], []];
+    const averageSwelling = hasData ? MeanOfRecord(swelling) : {};
+    const averagePain = hasData ? MeanOfRecord(pain) : {};
+    const averages = hasData ? MeanOfRecord(filtered_data) : {};
 
     return (
         <>
+            {/* The toolbar remains mounted here regardless of data status */}
             <RadioGroup
                 onChange={(_, data) => {
                     setFiltering(data.value == "" ? null : Number(data.value));
@@ -166,171 +173,200 @@ export function SwellingPainOverView({
                 />
             </RadioGroup>
 
-            <Group childHeight="500px" childWidth="400px">
-                <ChartToolbarWrapper title={"Swelling"}>
-                    <MannequinDisplay
-                        jointsWithScore={averageSwelling}
-                        fillColor={getClusterColor(filtering)}
-                    ></MannequinDisplay>
-                </ChartToolbarWrapper>
+            {/* CRASH GUARD: If no data exists, present the warning here, keeping the radio buttons interactive */}
+            {!hasData ? (
+                <div
+                    style={{
+                        padding: "48px 24px",
+                        textAlign: "center",
+                        color: "gray",
+                    }}
+                >
+                    <h3>
+                        No patients were assigned to this joint involvement
+                        pattern.
+                    </h3>
+                    <p>Please select a different JIP from the menu above.</p>
+                </div>
+            ) : (
+                <Group childHeight="500px" childWidth="400px">
+                    <ChartToolbarWrapper title={"Swelling"}>
+                        <MannequinDisplay
+                            jointsWithScore={averageSwelling}
+                            fillColor={getClusterColor(filtering)}
+                        ></MannequinDisplay>
+                    </ChartToolbarWrapper>
 
-                <ChartToolbarWrapper title={"Pain"}>
-                    <MannequinDisplay
-                        jointsWithScore={averagePain}
-                        fillColor={getClusterColor(filtering)}
-                    ></MannequinDisplay>
-                </ChartToolbarWrapper>
+                    <ChartToolbarWrapper title={"Pain"}>
+                        <MannequinDisplay
+                            jointsWithScore={averagePain}
+                            fillColor={getClusterColor(filtering)}
+                        ></MannequinDisplay>
+                    </ChartToolbarWrapper>
 
-                <ChartToolbarWrapper title="Characteristics">
-                    <div
-                        style={{
-                            display: "flex",
-                            gap: "20px",
-                            flexDirection: "column",
-                            height: "inherit",
-                        }}
-                    >
-                        {parameterConfig.map(
-                            (
-                                { label, minValue, maxValue, acceptedRange },
-                                i,
-                            ) => (
-                                <RangeGraph
-                                    key={label}
-                                    label={label}
-                                    minValue={minValue}
-                                    maxValue={maxValue}
-                                >
-                                    <FilledBarRangeIndicator
-                                        start={Math.min(
-                                            ...filtered_data.map(
-                                                (x) => x[label] as number,
-                                            ),
-                                        )}
-                                        end={Math.max(
-                                            ...filtered_data.map(
-                                                (x) => x[label] as number,
-                                            ),
-                                        )}
-                                        color={pallete[i]}
-                                    />
-                                    {acceptedRange && (
-                                        <RangeIndicator
-                                            start={acceptedRange[0]}
-                                            end={acceptedRange[1]}
+                    <ChartToolbarWrapper title="Characteristics">
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: "20px",
+                                flexDirection: "column",
+                                height: "inherit",
+                            }}
+                        >
+                            {parameterConfig.map(
+                                (
+                                    {
+                                        label,
+                                        minValue,
+                                        maxValue,
+                                        acceptedRange,
+                                    },
+                                    i,
+                                ) => (
+                                    <RangeGraph
+                                        key={label}
+                                        label={label}
+                                        minValue={minValue}
+                                        maxValue={maxValue}
+                                    >
+                                        <FilledBarRangeIndicator
+                                            start={Math.min(
+                                                ...filtered_data.map(
+                                                    (x) => x[label] as number,
+                                                ),
+                                            )}
+                                            end={Math.max(
+                                                ...filtered_data.map(
+                                                    (x) => x[label] as number,
+                                                ),
+                                            )}
+                                            color={pallete[i]}
                                         />
-                                    )}
-                                    <AverageIndicator x={averages[label]} />
-                                    <StandardDeviationIndicator
-                                        sd={standardDeviation(
-                                            filtered_data.map(
-                                                (x) => x[label] as number,
-                                            ),
-                                            filtering === null,
+                                        {acceptedRange && (
+                                            <RangeIndicator
+                                                start={acceptedRange[0]}
+                                                end={acceptedRange[1]}
+                                            />
                                         )}
-                                        average={averages[label]}
-                                    />
-                                </RangeGraph>
-                            ),
-                        )}
+                                        <AverageIndicator x={averages[label]} />
+                                        <StandardDeviationIndicator
+                                            sd={standardDeviation(
+                                                filtered_data.map(
+                                                    (x) => x[label] as number,
+                                                ),
+                                                filtering === null,
+                                            )}
+                                            average={averages[label]}
+                                        />
+                                    </RangeGraph>
+                                ),
+                            )}
 
-                        <RangeGraph label="Sex" minValue={0} maxValue={100}>
-                            <FilledBarPercentageIndicator
-                                start={0}
-                                percentage={
-                                    (filtered_data.filter(
-                                        (x) => x.Sex[0] === "M",
-                                    ).length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                label="Male"
-                                color={"lightblue"}
-                            />
-                            <FilledBarPercentageIndicator
-                                start={
-                                    (filtered_data.filter(
-                                        (x) => x.Sex[0] === "M",
-                                    ).length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                percentage={
-                                    (filtered_data.filter(
-                                        (x) => x.Sex[0] !== "M",
-                                    ).length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                label="Female"
-                                color={"pink"}
-                            />
-                        </RangeGraph>
+                            <RangeGraph label="Sex" minValue={0} maxValue={100}>
+                                <FilledBarPercentageIndicator
+                                    start={0}
+                                    percentage={
+                                        (filtered_data.filter(
+                                            (x) => x.Sex[0] === "M",
+                                        ).length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    label="Male"
+                                    color={"lightblue"}
+                                />
+                                <FilledBarPercentageIndicator
+                                    start={
+                                        (filtered_data.filter(
+                                            (x) => x.Sex[0] === "M",
+                                        ).length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    percentage={
+                                        (filtered_data.filter(
+                                            (x) => x.Sex[0] !== "M",
+                                        ).length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    label="Female"
+                                    color={"pink"}
+                                />
+                            </RangeGraph>
 
-                        <RangeGraph label="RF" minValue={0} maxValue={100}>
-                            <FilledBarPercentageIndicator
-                                start={0}
-                                percentage={
-                                    (filtered_data.filter((x) => x.RF === 1)
-                                        .length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                label="RF positive"
-                                color={pallete[8]}
-                            />
-                            <FilledBarPercentageIndicator
-                                start={
-                                    (filtered_data.filter((x) => x.RF === 1)
-                                        .length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                percentage={
-                                    (filtered_data.filter((x) => x.RF === 0)
-                                        .length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                label="RF negative"
-                                color={"lightgray"}
-                            />
-                        </RangeGraph>
+                            <RangeGraph label="RF" minValue={0} maxValue={100}>
+                                <FilledBarPercentageIndicator
+                                    start={0}
+                                    percentage={
+                                        (filtered_data.filter((x) => x.RF === 1)
+                                            .length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    label="RF positive"
+                                    color={pallete[8]}
+                                />
+                                <FilledBarPercentageIndicator
+                                    start={
+                                        (filtered_data.filter((x) => x.RF === 1)
+                                            .length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    percentage={
+                                        (filtered_data.filter((x) => x.RF === 0)
+                                            .length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    label="RF negative"
+                                    color={"lightgray"}
+                                />
+                            </RangeGraph>
 
-                        <RangeGraph label="ACPA" minValue={0} maxValue={100}>
-                            <FilledBarPercentageIndicator
-                                start={0}
-                                percentage={
-                                    (filtered_data.filter((x) => x.ACPA === 1)
-                                        .length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                label="ACPA positive"
-                                color={pallete[9]}
-                            />
-                            <FilledBarPercentageIndicator
-                                start={
-                                    (filtered_data.filter((x) => x.ACPA === 1)
-                                        .length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                percentage={
-                                    (filtered_data.filter((x) => x.ACPA === 0)
-                                        .length /
-                                        filtered_data.length) *
-                                    100
-                                }
-                                label="ACPA negative"
-                                color={"lightgray"}
-                            />
-                        </RangeGraph>
+                            <RangeGraph
+                                label="ACPA"
+                                minValue={0}
+                                maxValue={100}
+                            >
+                                <FilledBarPercentageIndicator
+                                    start={0}
+                                    percentage={
+                                        (filtered_data.filter(
+                                            (x) => x.ACPA === 1,
+                                        ).length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    label="ACPA positive"
+                                    color={pallete[9]}
+                                />
+                                <FilledBarPercentageIndicator
+                                    start={
+                                        (filtered_data.filter(
+                                            (x) => x.ACPA === 1,
+                                        ).length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    percentage={
+                                        (filtered_data.filter(
+                                            (x) => x.ACPA === 0,
+                                        ).length /
+                                            filtered_data.length) *
+                                        100
+                                    }
+                                    label="ACPA negative"
+                                    color={"lightgray"}
+                                />
+                            </RangeGraph>
 
-                        {RenderLegend()}
-                    </div>
-                </ChartToolbarWrapper>
-            </Group>
+                            {RenderLegend()}
+                        </div>
+                    </ChartToolbarWrapper>
+                </Group>
+            )}
         </>
     );
 }

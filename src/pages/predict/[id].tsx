@@ -45,10 +45,7 @@ export default function Predict() {
                 addPrediction(id, predictions);
 
                 // FIX 2: Correctly save the incoming background data to state
-                console.log(
-                    "Latent factors in predict new: ",
-                    latentFactorArray,
-                );
+
                 // Quick QC Link: Attach to window right before navigating
                 (window as any).latentFactorArray = latentFactorArray;
 
